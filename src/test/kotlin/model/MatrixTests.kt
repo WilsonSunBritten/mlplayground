@@ -38,4 +38,38 @@ class MatrixTests {
 
         Assert.assertTrue(expectedMatrix.equals(testMatrix.multiply(testOtherMatrix)))
     }
+
+    @Test
+    fun testDot() {
+        val testMatrix = Matrix(listOf(
+                listOf(1.0, 2.0),
+                listOf(3.0, 4.0)
+        ))
+
+        val testOtherMatrix = Matrix(listOf(
+                listOf(1.0, 1.0),
+                listOf(2.0, 2.0)
+        ))
+        val addResult = Matrix(listOf(
+                listOf(2.0, 3.0),
+                listOf(5.0, 6.0)
+        ))
+        val subtractResult = Matrix(listOf(
+                listOf(0.0, 1.0),
+                listOf(1.0, 2.0)
+        ))
+        val multiplyResult = Matrix(listOf(
+                listOf(1.0, 2.0),
+                listOf(6.0, 8.0)
+        ))
+        val divideResult = Matrix(listOf(
+                listOf(1.0, 2.0),
+                listOf(1.5, 2.0)
+        ))
+        Assert.assertTrue(testMatrix.dotOperation(testOtherMatrix, Matrix.MatrixOperation.PLUS).equals(addResult))
+        Assert.assertTrue(testMatrix.dotOperation(testOtherMatrix, Matrix.MatrixOperation.SUBTRACT).equals(subtractResult))
+        Assert.assertTrue(testMatrix.dotOperation(testOtherMatrix, Matrix.MatrixOperation.MULTIPLY).equals(multiplyResult))
+        Assert.assertTrue(testMatrix.dotOperation(testOtherMatrix, Matrix.MatrixOperation.DIVIDE).equals(divideResult))
+
+    }
 }

@@ -1,5 +1,6 @@
 package model
 
+import com.sun.org.apache.xpath.internal.operations.Minus
 import java.lang.Exception
 
 class Matrix(private val data: List<List<Double>>) {
@@ -12,6 +13,33 @@ class Matrix(private val data: List<List<Double>>) {
     init {
         val firstRowLength = data.firstOrNull()?.size ?: 0
         require(data.all { it.size == firstRowLength }) { "Not all rows share the same size(first row was size $firstRowLength" }
+    }
+
+    fun dotOperation(otherMatrix: Matrix, operation: MatrixOperation): Matrix {
+        val thisSize = this.size()
+        require(otherMatrix.size() == this.size())
+        val resultHolder = Array(thisSize.first) { Array<Number?>(thisSize.second) { null } }
+
+        val result = resultHolder.mapIndexed { rowIndex, arrayOfNumbers ->
+            arrayOfNumbers.mapIndexed { columnIndex, _ ->
+                val thisValue = this.get(rowIndex, columnIndex)
+                val otherValue = otherMatrix.get(rowIndex, columnIndex)
+                when(operation) {
+                    is MatrixOperation.PLUS -> thisValue + otherValue
+                    is MatrixOperation.SUBTRACT -> thisValue - otherValue
+                    is MatrixOperation.MULTIPLY -> thisValue * otherValue
+                    is MatrixOperation.DIVIDE -> thisValue / otherValue
+                }
+            }
+        }
+        return Matrix(result)
+    }
+
+    sealed class MatrixOperation {
+        object PLUS : MatrixOperation()
+        object SUBTRACT : MatrixOperation()
+        object MULTIPLY : MatrixOperation()
+        object DIVIDE : MatrixOperation()
     }
 
     fun get(rowIndex: Int, columnIndex: Int): Double {
